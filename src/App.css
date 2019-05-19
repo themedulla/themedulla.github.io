@@ -2,14 +2,9 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .App-header {
   background-color: #282c34;
+  background-color: #519fa5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -23,11 +18,111 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+img {
+  width: 42px;
+  height: 42px;
 }
+
+/**************  Other  *****************/
+* {
+  box-sizing: border-box;
+}
+
+hr {
+  color: #0f4957;
+}
+
+/**************  Content  *****************/
+.Content {
+  background-color: #17191b;
+  color: white;
+  border-radius: 5px;
+  /*height: 520px;*/
+  /*width: 360px;*/ /*?*/
+  padding: 10px;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/**************  Table  *****************/
+.Table {
+  background-color: teal;
+  margin: 0 auto;
+
+  display: inline-table;
+}
+
+th, td {
+  padding: 2px 15px;
+  text-align: left;
+}
+
+td {
+  border-top: 1px dashed #742d2d;
+}
+
+th {
+  background-color: #003d51;
+  border-bottom: 1px solid #de4306;
+  color: white;
+}
+
+#user-list {
+  border-collapse: collapse;
+}
+
+#user-list td:first-child {
+  padding: 1px;
+  visibility: hidden;
+  /*border: none;*/
+}
+
+#user-list img {
+  width: 42px;
+  height: 42px;
+}
+
+/**************  xxx  *****************/
+
+
+
+
+
+
+/************* Buttons: ************/
+.Select {
+  border: none;
+  background-color: #9f2112;
+  color: white;
+  cursor: pointer;
+  width: 80px;
+  margin: 0 auto;
+  padding: 10px;
+  margin-left: 3px; 
+  margin-right: 3px; 
+}
+
+.Select:hover {
+  background-color: #d45242;
+}
+
+
+
+.btn {
+  border: none; /* Remove borders */
+  color: white; /* Add a text color */
+  padding: 7px 14px; /* Add some padding */
+  cursor: pointer; /* Add a pointer cursor on mouse-over */
+}
+
+.submit {background-color: #2196F3;} /* Blue */
+.submit:hover {background: #0b7dda;}
+
+.warning {background-color: #ff9800;} /* Orange */
+.warning:hover {background: #e68a00;}
+
+.danger {background-color: #f44336;} /* Red */
+.danger:hover {background: #da190b;}
+
+
