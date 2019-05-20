@@ -59,13 +59,13 @@ class LoadingSpinner extends Component {
 
 class TableRow extends Component {
   render() {
-  alert(this.props.id);
+  // alert(this.props.id);
 
     return(
       <tr>
         <td>x</td>
         <td>{this.props.id}</td>
-        <td>{this.props.name}</td>
+        <td>{this.props.name}inTR</td>
         <td>{this.props.last_name}</td>
       </tr>
     );
@@ -76,28 +76,22 @@ class UserList extends Component {
   constructor(props) {
     super(props);
     this.makeUsers=this.makeUsers.bind(this);
+    this.took = this.took.bind(this);
     this.state = {
       error: null,
       isLoaded: false,
-      uuusers: []
-      /*
+      uuusers: [      
         {
           "id": 13,
-          "email": "eve.holt@reqres.in",
-          "name": "Abbas",
-          "first_name": "Eve",
-          "last_name": "Holt",
-          "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg"
+          "name": "2Abbas",
+          "last_name": "khalili",
         },
         {
           "id": 14,
-          "email": "charles.morris@reqres.in",
-          "name": "Taghi",
-          "first_name": "Charles",
-          "last_name": "Morris",
-          "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"
+          "name": "2Naghi",
+          "last_name": "Mamouli",
         },
-      ] */
+      ]
     }
   }
   
@@ -105,31 +99,75 @@ class UserList extends Component {
     this.setState({uuusers: users});
   }
 
+  tick(){
+    let l = localStorage.getItem('user-list');
+    // loca = loca.json();
+    l = JSON.parse(l);
+
+    this.setState({uuusers: l});
+  }
+
+  took(){
+    // let l = localStorage.getItem('user-list');
+    // l = JSON.parse(l);
+    // this.setState({uuusers: l});
+    this.setState({isLoaded: true});
+  }
+
   componentDidMount() {
+    // exxeeeess xxx:
+    this.timerID = setInterval(
+      () => this.tick(),
+      9000
+    );
+    //////////////////////////////
+    this.timerID = setInterval(
+      () => this.took(),
+      3000
+    );
+    //////////////////////////////
+    //////////////////////////////
+
+
     let users = localStorage.getItem('user-list');
 
     if (1) {
     // if (users === null) {
       fetch('https://reqres.in/api/users?page=2')
         .then(function(response) {
+            console.log("step 1 done.");
+
             return response.json();
           })
         .then(function(response) {
             users = response.data;
             localStorage.setItem('user-list', JSON.stringify(users));
-            fillUsers(users);
+          ///  fillUsers(users);
             // this.makeUsers(users);
             console.log("2users are:", users);
-            let loca = localStorage.getItem('user-list');
-            console.log("localStorage:", localStorage.getItem('user-list'));
+          ///  let loca = localStorage.getItem('user-list');
+            // loca = loca.json();
+          ///  loca = JSON.parse(loca);
+          ///  console.log("localStorage:", loca);
+            // console.log("localStorage:", localStorage.getItem('user-list'));
             
+            // console.log("bef");
+            // console.log("uuusers:", this.state.uuusers);
 
             
             this.setState({
-              isLoaded: true,
-              // homes: result
-              uuusers: loca
-            });
+              uuusers: users,
+              // isLoaded: true,
+
+            }).then(
+                this.setState({
+                  isLoaded: true,
+                })
+            )
+
+            // console.log("uuusers:", this.state.uuusers);
+            // console.log("fin");
+
 
           })
         .catch(function(response) {
@@ -154,41 +192,61 @@ class UserList extends Component {
     // const isLoaded = this.state.isLoaded;
     const { error, isLoaded } = this.state;
     const rows = [];
-    this.state.uuusers.forEach((user) => {
-      rows.push(
-        <TableRow
-          id={user.id}
-          name={user.name}
-          last_name={user.last_name}          
-        />
-      );
-    });
+    // console.log("in render, uuusers:", this.state.uuusers);
+      this.state.uuusers.forEach((usr) => {
+        rows.push(
+          <TableRow
+            id={usr.id}
+            name={usr.name}
+            last_name={usr.last_name}          
+          />
+        );
+      });
 
-    if(!isLoaded) {
-      return (
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>100</td>
-            <td>Asghar</td>
-            <td>ok4</td>
-          </tr>
-          
-          <tr>
-            <td>2</td>
-            <td>101</td>
-            <td>Taghiz</td>
-            <td>ok5</td>
-          </tr>
-        </tbody>
-      );
-    } else {
+
+
+
+    if(isLoaded) {
       return (
         <tbody>
           {rows}
         </tbody>
       );
-    }
+    } else {
+        return (
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>100</td>
+              <td>1Asghar</td>
+              <td>1ok4</td>
+            </tr>
+            
+            <tr>
+              <td>2</td>
+              <td>101</td>
+              <td>1Taghiz</td>
+              <td>1ok5</td>
+            </tr>
+          </tbody>
+        );
+      }
+      // this.state.uuusers.forEach((usr) => {
+      //   rows.push(
+      //     <TableRow
+      //       id={usr.id}
+      //       name={usr.name}
+      //       last_name={usr.last_name}          
+      //     />
+      //   );
+      // });
+
+      return (
+        <tbody>
+          {rows}
+        </tbody>
+      );
+    
   }
 }
 
