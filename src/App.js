@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import './user.css';
+import './loading-spinner.css';
 // import './user.js';
 /*
 document.addEventListener('DOMContentLoaded', function(){ 
@@ -77,6 +77,8 @@ class UserList extends Component {
     super(props);
     this.makeUsers=this.makeUsers.bind(this);
     this.state = {
+      error: null,
+      isLoaded: false,
       uuusers: []
       /*
         {
@@ -116,12 +118,27 @@ class UserList extends Component {
             users = response.data;
             localStorage.setItem('user-list', JSON.stringify(users));
             fillUsers(users);
-            this.makeUsers(users);
+            // this.makeUsers(users);
             console.log("2users are:", users);
+            let loca = localStorage.getItem('user-list');
+            console.log("localStorage:", localStorage.getItem('user-list'));
+            
+
+            
+            this.setState({
+              isLoaded: true,
+              // homes: result
+              uuusers: loca
+            });
+
           })
         .catch(function(response) {
             document.getElementsByClassName('.Content').html('<div class="error">Error fetching data</div>');
             console.log('Error: ' + response.statusText);
+            this.setState({
+              isLoaded: true,
+              error: response
+            });
           });
     } else {
         fillUsers(JSON.parse(users));
@@ -130,7 +147,12 @@ class UserList extends Component {
     }
   }
 
+  componentWillUnmount() {
+  }
+
   render(){
+    // const isLoaded = this.state.isLoaded;
+    const { error, isLoaded } = this.state;
     const rows = [];
     this.state.uuusers.forEach((user) => {
       rows.push(
@@ -142,11 +164,31 @@ class UserList extends Component {
       );
     });
 
-    return (
-      <tbody>
-        {rows}
-      </tbody>
-    );
+    if(!isLoaded) {
+      return (
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>100</td>
+            <td>Asghar</td>
+            <td>ok4</td>
+          </tr>
+          
+          <tr>
+            <td>2</td>
+            <td>101</td>
+            <td>Taghiz</td>
+            <td>ok5</td>
+          </tr>
+        </tbody>
+      );
+    } else {
+      return (
+        <tbody>
+          {rows}
+        </tbody>
+      );
+    }
   }
 }
 

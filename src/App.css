@@ -47,7 +47,7 @@ hr {
 
 /**************  Table  *****************/
 .Table {
-  background-color: teal;
+  /*background-color: teal;*/
   margin: 0 auto;
 
   display: inline-table;
