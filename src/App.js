@@ -142,15 +142,15 @@ class AddEditRemove extends Component {
     this.handleRemove = this.handleRemove.bind(this);
   }
 
-  handleAdd(selectedButton) {
+  handleAdd() {
     this.props.onButtonClick('add');
   }
 
-  handleEdit(selectedButton) {
+  handleEdit() {
     this.props.onButtonClick('edit');
   }
 
-  handleRemove(selectedButton) {
+  handleRemove() {
     this.props.onButtonClick('remove');
   }
 
@@ -168,17 +168,33 @@ class AddEditRemove extends Component {
 }
 
 class Forms extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     shit: null
-  //   }
-  // }
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleConfirmAdd = this.handleConfirmAdd.bind(this);
+    this.handleConfirmEdit = this.handleConfirmEdit.bind(this);
+    this.handleConfirmRemove = this.handleConfirmRemove.bind(this);
+    this.state = {
+      value: '',
+      userId: ''
+    }
+  }
 
-  // handleClick(selectedButton) {
-  //   this.props.onButtonClick(selectedButton);
-  // }
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
 
+  handleConfirmAdd() {
+    this.props.onConfirm(this.state.value, '');
+  }
+
+  handleConfirmEdit() {
+    this.props.onConfirm(this.state.value, this.state.userId);
+  }
+
+  handleConfirmRemove() {
+    this.props.onConfirm('', this.state.userId);
+  }
   render(){
     const selectedButton = this.props.buttonClicked;
     // const tRows = this.props.users;
@@ -190,13 +206,14 @@ class Forms extends Component {
             <fieldset>
               <legend>Add Member</legend>
               Name:<br />
-              <input className="memberName" type="text" name="name" />
+              <input className="memberName" type="text" name="name"
+               onChange={this.handleChange} />
               <br />
               Job:<br />
               <input className="memberJob" type="text" name="job" />
               <br /><br />
               <button type="button" className="btn submit"
-               onclick="handleClick('submit'); return false;">Submit</button>
+               onClick={this.handleConfirmAdd}>Submit</button>
             </fieldset>
           </form>
         </div>
@@ -214,13 +231,14 @@ class Forms extends Component {
                     Change it's info to: <br/><br/>
 
                     Name:<br/>
-                    <input className="memberName" type="text" name="name"></input>
+                    <input className="memberName" type="text" name="name"
+                     onChange={this.handleChange} />
                     <br/>
                     Job:<br/>
-                    <input className="memberJob" type="text" name="job"></input>
+                    <input className="memberJob" type="text" name="job" />
                     <br/><br/>
                     <button type="button" className="btn warning"
-                     onclick="editMember(); return false;">Change!</button>
+                     onClick={this.handleConfirmEdit}>Change!</button>
                 </p>
                 <p className="messages">User has been edited successfully!</p>
             </fieldset>
@@ -229,7 +247,7 @@ class Forms extends Component {
       );
     }
 
-    if(selectedButton == "remove") {
+    if(selectedButton === "remove") {
       return(
         <div>
           <form class="HiddenForms" id="remove" action="">
@@ -241,7 +259,7 @@ class Forms extends Component {
                   Are you sure you want to permanently delete user '<span></span>'?
                   <br/><br/>
                   <button type="button" class="btn danger"
-                   onclick="removeMember(); return false;">Remove!</button>
+                   onClick={this.handleConfirmRemove}>Remove!</button>
               </p>
               <p class="messages">User has been deleted successfully!</p>
             </fieldset>
@@ -260,15 +278,31 @@ class Content extends Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
     this.state = {
-      buttonClicked: "",
+      buttonClicked: '',
+      name: '',
+      confirmed: false,
+      userId: ''
     }
   }
 
   handleClick(selectedButton) {
     this.setState ({
-      buttonClicked: selectedButton
+      buttonClicked: selectedButton,
+      name: '',
+      confirmed: false,
+      userId: ''
     });
+  }
+
+  handleConfirm(value, userId) {
+    this.setState ({
+      name: value,
+      confirmed: true,
+      userId: userId
+    });
+    console.log("handleConfirm: button:", this.state.buttonClicked ," value :", value)
   }
 
   render() {
@@ -276,7 +310,7 @@ class Content extends Component {
       <div className="Content">
         <Table />
         <AddEditRemove onButtonClick={this.handleClick}/>
-        <Forms buttonClicked={this.state.buttonClicked}/>
+        <Forms buttonClicked={this.state.buttonClicked} onConfirm={this.handleConfirm}/>
       </div>
     );
   }
