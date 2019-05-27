@@ -23,7 +23,7 @@ class TableRow extends Component {
         <td></td>
         <td>{this.props.id}</td>
         <td>{this.props.name} {this.props.last_name}</td>
-        <td><img src={this.props.avatar} /></td>
+        <td><img src={this.props.avatar} alt="avatar" /></td>
       </tr>
     );
   }
@@ -135,39 +135,150 @@ class Table extends Component {
 }
 
 class AddEditRemove extends Component {
+  constructor(props) {
+    super(props);
+    this.handleAdd = this.handleAdd.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+  }
+
+  handleAdd(selectedButton) {
+    this.props.onButtonClick('add');
+  }
+
+  handleEdit(selectedButton) {
+    this.props.onButtonClick('edit');
+  }
+
+  handleRemove(selectedButton) {
+    this.props.onButtonClick('remove');
+  }
+
   render() {
     return (
-      <div className="">
+      <div className="AddEditRemove">
         <hr/>
-          <button className="Select">Add</button>
-          <button className="Select">Edit</button>
-          <button className="Select">Remove</button>
+          <button onClick={this.handleAdd} className="Select">Add</button>
+          <button onClick={this.handleEdit} className="Select">Edit</button>
+          <button onClick={this.handleRemove} className="Select">Remove</button>
         <hr/>
       </div>
     );
   }
 }
 
-class XXX extends Component {
-  render(){
-    const tRows = this.props.users;
-    // let tRow = tRows.map(home => <div>{home.name}</div>);
-    return (
-      <div>
-        {tRows.map(home => <div>{home.id}</div>)}
-      </div>
-    );
-  }
+class Forms extends Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     shit: null
+  //   }
+  // }
 
+  // handleClick(selectedButton) {
+  //   this.props.onButtonClick(selectedButton);
+  // }
+
+  render(){
+    const selectedButton = this.props.buttonClicked;
+    // const tRows = this.props.users;
+    // let tRow = tRows.map(home => <div>{home.name}</div>);
+    if(selectedButton === "add") {
+      return (
+        <div>
+          <form className="HiddenForms" id="add">
+            <fieldset>
+              <legend>Add Member</legend>
+              Name:<br />
+              <input className="memberName" type="text" name="name" />
+              <br />
+              Job:<br />
+              <input className="memberJob" type="text" name="job" />
+              <br /><br />
+              <button type="button" className="btn submit"
+               onclick="handleClick('submit'); return false;">Submit</button>
+            </fieldset>
+          </form>
+        </div>
+      );
+    }
+
+    if(selectedButton === "edit") {
+      return (
+        <div>
+          <form className="HiddenForms" id="edit">
+            <fieldset>
+              <legend>Edit Member</legend>
+                <p className="beforeHint">Please select a user to edit.</p>
+                <p className="afterHint">
+                    Change it's info to: <br/><br/>
+
+                    Name:<br/>
+                    <input className="memberName" type="text" name="name"></input>
+                    <br/>
+                    Job:<br/>
+                    <input className="memberJob" type="text" name="job"></input>
+                    <br/><br/>
+                    <button type="button" className="btn warning"
+                     onclick="editMember(); return false;">Change!</button>
+                </p>
+                <p className="messages">User has been edited successfully!</p>
+            </fieldset>
+          </form>
+        </div>
+      );
+    }
+
+    if(selectedButton == "remove") {
+      return(
+        <div>
+          <form class="HiddenForms" id="remove" action="">
+            <fieldset>
+              <legend>Remove Member</legend>
+
+              <p class="beforeHint">Please select the user you want to remove.</p>
+              <p class="afterHint">
+                  Are you sure you want to permanently delete user '<span></span>'?
+                  <br/><br/>
+                  <button type="button" class="btn danger"
+                   onclick="removeMember(); return false;">Remove!</button>
+              </p>
+              <p class="messages">User has been deleted successfully!</p>
+            </fieldset>
+          </form>
+        </div>
+      );
+    }
+
+    return (
+        <div>
+          Shhhhhhit
+        </div>
+      );
+    }
 }
 
 class Content extends Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      buttonClicked: "",
+    }
+  }
+
+  handleClick(selectedButton) {
+    this.setState ({
+      buttonClicked: selectedButton
+    });
+  }
+
   render() {
     return (
       <div className="Content">
-        <Table users={this.props.users}/>
-        <AddEditRemove/>
-        <XXX users={this.props.users}/>
+        <Table />
+        <AddEditRemove onButtonClick={this.handleClick}/>
+        <Forms buttonClicked={this.state.buttonClicked}/>
       </div>
     );
   }
@@ -178,31 +289,11 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <Content users={US}/>
+          <Content />
         </header>
       </div>
     );
   }
 }
-
-
-const US = []
-
-/*[
-  {
-    "id": 4,
-    "email": "eve.holt@reqres.in",
-    "first_name": "Eve",
-    "last_name": "Holt",
-    "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg"
-  },
-  {
-    "id": 5,
-    "email": "charles.morris@reqres.in",
-    "first_name": "Charles",
-    "last_name": "Morris",
-    "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"
-  },
-]*/
 
 export default App;
