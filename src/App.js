@@ -2,71 +2,28 @@ import React, { Component } from 'react';
 import './App.css';
 import './loading-spinner.css';
 // import './user.js';
-/*
-document.addEventListener('DOMContentLoaded', function(){ 
-  // your code goes here
-  let users = localStorage.getItem('user-list');
-
-  // if (disableLocalStorage || users === null) {
-  if (users === null) {
-    fetch('https://reqres.in/api/users?page=2')
-      .then(function(response) {
-          return response.json();
-        })
-      .then(function(response) {
-          users = response.data;
-          localStorage.setItem('user-list', JSON.stringify(users));
-          fillUsers(users);
-        })
-      .catch(function(response) {
-          document.getElementsByClassName('.Content').html('<div class="error">Error fetching data</div>');
-          console.log('Error: ' + response.statusText);
-        });
-  } else {
-      fillUsers(JSON.parse(users));
-  }
-}, false);
-*/
-
-function fillUsers(users){
-  // document.getElementById('#loading').remove();
-
-  const tableRow = users.map((user) => 
-    <tr>
-      <td> first is {user.id} </td>
-      <td> second is {user.id} </td>
-      <td> third </td>
-    </tr>
-  );
-  
-  return (
-    {tableRow}
-  );
-}
-
 
 class LoadingSpinner extends Component {
   render() {
     return (
-      <div id="loading" class="spinner">
-        <div class="bounce1"></div>
-        <div class="bounce2"></div>
-        <div class="bounce3"></div>
-      </div>
+      <tr id="loading">
+        <td></td>
+        <td className="Spinner"><div className="bounce1"></div></td>
+        <td className="Spinner"><div className="bounce2"></div></td>
+        <td className="Spinner"><div className="bounce3"></div></td>
+      </tr>
     );
   }
 }
 
 class TableRow extends Component {
   render() {
-  // alert(this.props.id);
-
     return(
       <tr>
-        <td>x</td>
+        <td></td>
         <td>{this.props.id}</td>
-        <td>{this.props.name}inTR</td>
-        <td>{this.props.last_name}</td>
+        <td>{this.props.name} {this.props.last_name}</td>
+        <td><img src={this.props.avatar} /></td>
       </tr>
     );
   }
@@ -75,113 +32,51 @@ class TableRow extends Component {
 class UserList extends Component {
   constructor(props) {
     super(props);
-    this.makeUsers=this.makeUsers.bind(this);
-    this.took = this.took.bind(this);
     this.state = {
       error: null,
       isLoaded: false,
-      uuusers: [      
-        {
-          "id": 13,
-          "name": "2Abbas",
-          "last_name": "khalili",
-        },
-        {
-          "id": 14,
-          "name": "2Naghi",
-          "last_name": "Mamouli",
-        },
-      ]
+      uuusers: []
     }
-  }
-  
-  makeUsers(users){
-    this.setState({uuusers: users});
-  }
-
-  tick(){
-    let l = localStorage.getItem('user-list');
-    // loca = loca.json();
-    l = JSON.parse(l);
-
-    this.setState({uuusers: l});
-  }
-
-  took(){
-    // let l = localStorage.getItem('user-list');
-    // l = JSON.parse(l);
-    // this.setState({uuusers: l});
-    this.setState({isLoaded: true});
   }
 
   componentDidMount() {
-    // exxeeeess xxx:
-    this.timerID = setInterval(
-      () => this.tick(),
-      9000
-    );
-    //////////////////////////////
-    this.timerID = setInterval(
-      () => this.took(),
-      3000
-    );
-    //////////////////////////////
-    //////////////////////////////
-
-
     let users = localStorage.getItem('user-list');
-
+    const that = this;
+    
     if (1) {
     // if (users === null) {
       fetch('https://reqres.in/api/users?page=2')
         .then(function(response) {
-            console.log("step 1 done.");
-
             return response.json();
           })
         .then(function(response) {
             users = response.data;
             localStorage.setItem('user-list', JSON.stringify(users));
-          ///  fillUsers(users);
-            // this.makeUsers(users);
-            console.log("2users are:", users);
-          ///  let loca = localStorage.getItem('user-list');
-            // loca = loca.json();
-          ///  loca = JSON.parse(loca);
-          ///  console.log("localStorage:", loca);
-            // console.log("localStorage:", localStorage.getItem('user-list'));
             
-            // console.log("bef");
-            // console.log("uuusers:", this.state.uuusers);
-
-            
-            this.setState({
+            that.setState({
               uuusers: users,
-              // isLoaded: true,
-
-            }).then(
-                this.setState({
-                  isLoaded: true,
-                })
-            )
-
-            // console.log("uuusers:", this.state.uuusers);
-            // console.log("fin");
-
-
+              isLoaded: true,
+            });
           })
         .catch(function(response) {
-            document.getElementsByClassName('.Content').html('<div class="error">Error fetching data</div>');
+            document.getElementsByClassName('.Content').html(
+              '<div class="error">Error fetching data</div>'
+            );
             console.log('Error: ' + response.statusText);
-            this.setState({
+            that.setState({
               isLoaded: true,
               error: response
             });
           });
     } else {
-        fillUsers(JSON.parse(users));
-        console.log("it was full!")
-        console.log("3users are:", users);
+        console.log("the users were already stored in the localStorage!")
+        console.log("So let's launch them from there!")
+
+        users = JSON.parse(users);
+        that.setState({
+          isLoaded: true,
+          uuusers: users
+        });
     }
   }
 
@@ -197,56 +92,32 @@ class UserList extends Component {
         rows.push(
           <TableRow
             id={usr.id}
-            name={usr.name}
-            last_name={usr.last_name}          
+            name={usr.first_name}
+            last_name={usr.last_name}
+            avatar={usr.avatar}
           />
         );
       });
 
-
-
-
-    if(isLoaded) {
-      return (
-        <tbody>
-          {rows}
-        </tbody>
-      );
-    } else {
+      if(!isLoaded){
         return (
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>100</td>
-              <td>1Asghar</td>
-              <td>1ok4</td>
-            </tr>
-            
-            <tr>
-              <td>2</td>
-              <td>101</td>
-              <td>1Taghiz</td>
-              <td>1ok5</td>
-            </tr>
+            <LoadingSpinner />
           </tbody>
         );
       }
-      // this.state.uuusers.forEach((usr) => {
-      //   rows.push(
-      //     <TableRow
-      //       id={usr.id}
-      //       name={usr.name}
-      //       last_name={usr.last_name}          
-      //     />
-      //   );
-      // });
+
+      if(error){
+        return (
+          <p className="Error"> Error:{error}</p>
+        );
+      }
 
       return (
         <tbody>
           {rows}
         </tbody>
       );
-    
   }
 }
 
@@ -276,8 +147,6 @@ class AddEditRemove extends Component {
     );
   }
 }
-
-
 
 class XXX extends Component {
   render(){

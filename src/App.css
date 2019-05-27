@@ -32,6 +32,11 @@ hr {
   color: #0f4957;
 }
 
+.Error { 
+  display: inline-block;
+  width: 100px;
+}
+
 /**************  Content  *****************/
 .Content {
   background-color: #17191b;
