@@ -43,8 +43,8 @@ class UserList extends Component {
     let users = localStorage.getItem('user-list');
     const that = this;
     
-    if (1) {
-    // if (users === null) {
+    // if (1) {
+    if (users === null) {
       fetch('https://reqres.in/api/users?page=2')
         .then(function(response) {
             return response.json();
@@ -251,9 +251,7 @@ class Forms extends Component {
     }
 
     return (
-        <div>
-          Shhhhhhit
-        </div>
+        <div></div>
       );
     }
 }

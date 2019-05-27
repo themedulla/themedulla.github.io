@@ -136,11 +136,11 @@ overflow-wrap: break-word;
   background-color: #9f2112;
   color: white;
   cursor: pointer;
-  width: 80px;
+  width: 95px;
   margin: 0 auto;
   padding: 10px;
-  margin-left: 3px; 
-  margin-right: 3px; 
+  margin-left: 5px; 
+  margin-right: 5px; 
 }
 
 .Select:hover {
