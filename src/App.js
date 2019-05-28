@@ -17,10 +17,24 @@ class LoadingSpinner extends Component {
 }
 
 class TableRow extends Component {
+  constructor(props) {
+    super(props);
+    this.onSelectedUserChange = this.onSelectedUserChange.bind(this);
+  }
+
+  onSelectedUserChange(e){
+    this.props.onUserIdChange(e.target.value);
+  }
+
   render() {
     return(
       <tr>
-        <td></td>
+        <td style={{visibility:
+         this.props.buttonClicked === 'remove' || this.props.buttonClicked === 'edit' ?
+         'visible' : 'hidden' }}>
+           <input onClick={this.onSelectedUserChange} type='radio'
+           name='choose' value={this.props.id} />
+        </td>
         <td>{this.props.id}</td>
         <td>{this.props.name} {this.props.last_name}</td>
         <td><img src={this.props.avatar} alt="avatar" /></td>
@@ -84,40 +98,40 @@ class UserList extends Component {
   }
 
   render(){
-    // const isLoaded = this.state.isLoaded;
     const { error, isLoaded } = this.state;
     const rows = [];
-    // console.log("in render, uuusers:", this.state.uuusers);
-      this.state.uuusers.forEach((usr) => {
-        rows.push(
-          <TableRow
-            id={usr.id}
-            name={usr.first_name}
-            last_name={usr.last_name}
-            avatar={usr.avatar}
-          />
-        );
-      });
+    this.state.uuusers.forEach((usr) => {
+      rows.push(
+        <TableRow 
+          buttonClicked = {this.props.buttonClicked}
+          onUserIdChange = {this.props.onUserIdChange}
+          id={usr.id}
+          name={usr.first_name}
+          last_name={usr.last_name}
+          avatar={usr.avatar}
+        />
+      );
+    });
 
-      if(!isLoaded){
-        return (
-          <tbody>
-            <LoadingSpinner />
-          </tbody>
-        );
-      }
-
-      if(error){
-        return (
-          <p className="Error"> Error:{error}</p>
-        );
-      }
-
+    if(!isLoaded){
       return (
         <tbody>
-          {rows}
+          <LoadingSpinner />
         </tbody>
       );
+    }
+
+    if(error){
+      return (
+        <p className="Error"> Error:{error}</p>
+      );
+    }
+
+    return (
+      <tbody>
+        {rows}
+      </tbody>
+    );
   }
 }
 
@@ -128,7 +142,7 @@ class Table extends Component {
         <thead>
             <th></th> <th>id</th> <th>name</th> <th>avatar</th>
         </thead>
-        <UserList/>
+        <UserList onUserIdChange={this.props.onUserIdChange} buttonClicked={this.props.buttonClicked} />
       </div>
     );
   }
@@ -197,8 +211,7 @@ class Forms extends Component {
   }
   render(){
     const selectedButton = this.props.buttonClicked;
-    // const tRows = this.props.users;
-    // let tRow = tRows.map(home => <div>{home.name}</div>);
+
     if(selectedButton === "add") {
       return (
         <div>
@@ -279,6 +292,7 @@ class Content extends Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
+    this.handleUserId = this.handleUserId.bind(this);
     this.state = {
       buttonClicked: '',
       name: '',
@@ -305,10 +319,17 @@ class Content extends Component {
     console.log("handleConfirm: button:", this.state.buttonClicked ," value :", value)
   }
 
+  handleUserId(selectedUser) {
+    this.setState ({
+      userId: selectedUser
+    })
+    console.log("userId :", selectedUser)
+  }
+
   render() {
     return (
       <div className="Content">
-        <Table />
+        <Table onUserIdChange={this.handleUserId} buttonClicked={this.state.buttonClicked}/>
         <AddEditRemove onButtonClick={this.handleClick}/>
         <Forms buttonClicked={this.state.buttonClicked} onConfirm={this.handleConfirm}/>
       </div>

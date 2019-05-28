@@ -107,7 +107,7 @@ th {
 
 #user-list td:first-child {
   padding: 1px;
-  visibility: hidden;
+  /*visibility: hidden;*/
   /*border: none;*/
 }
 
